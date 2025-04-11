@@ -823,6 +823,7 @@ GameObject:
   - component: {fileID: 399671347}
   - component: {fileID: 399671346}
   - component: {fileID: 399671345}
+  - component: {fileID: 399671348}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -894,7 +895,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 399671346}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 399671348}
+        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
+        m_MethodName: LoadNextScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &399671346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -933,6 +946,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 399671343}
   m_CullTransparentMesh: 1
+--- !u!114 &399671348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399671343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9457e70232308340a11f8ae49ce704f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextSceneName: Factory
 --- !u!1 &402821452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1292,7 +1318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc3114b853762340b8f1d06b7090f56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingUI: {fileID: 0}
+  buildingUI: {fileID: 1294593906}
 --- !u!1001 &612777740
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2271,8 +2297,10 @@ GameObject:
   - component: {fileID: 1123999890}
   - component: {fileID: 1123999889}
   - component: {fileID: 1123999888}
+  - component: {fileID: 1123999892}
+  - component: {fileID: 1123999893}
   m_Layer: 0
-  m_Name: Cylinder
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2357,6 +2385,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1123999892
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123999887}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1123999893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123999887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afb9059bc0f6a44faba0a2345d326cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  rotateSpeed: 180
+  jumpForce: 8
+  groundCheckDistance: 0.1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  groundCheckPoint: {fileID: 0}
 --- !u!1 &1294593906
 GameObject:
   m_ObjectHideFlags: 0
