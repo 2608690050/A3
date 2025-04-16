@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Factory.unity
+    path: Assets/SIYan Chen/Scenes/Factory.unity
     guid: 5ce9efef3ef79064cb60336d0b6fb166
   - enabled: 1
-    path: Assets/Scenes/Guide.unity
+    path: Assets/SIYan Chen/Scenes/Guide.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects: {}
