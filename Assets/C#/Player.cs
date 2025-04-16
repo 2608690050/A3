@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class Player : MonoBehaviour
     public AudioSource jumpAudio;
 
     // 视角控制参数
-    public Transform cameraTransform; // 拖入主摄像机
+    public Transform cameraTransform;
     public float rotationSpeed = 10f;
     private Vector3 moveDirection;
 
@@ -28,6 +29,12 @@ public class Player : MonoBehaviour
     public AudioSource clickAudio;
     public AudioSource waterSplashAudio;
 
+    // Welcome消息相关变量
+    [Header("Welcome Message")]
+    public TextMeshProUGUI welcomeText;
+    public Image backgroundPanel;
+    public float messageDuration = 5f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -36,14 +43,16 @@ public class Player : MonoBehaviour
         SetCountText();
         if (gameOverText != null) gameOverText.gameObject.SetActive(false);
 
-        // 锁定鼠标
+        // 初始化时隐藏Welcome相关UI
+        if (welcomeText != null) welcomeText.gameObject.SetActive(false);
+        if (backgroundPanel != null) backgroundPanel.gameObject.SetActive(false);
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     void Update()
     {
-        // 使Player始终面向摄像机前方（忽略Y轴）
         if (cameraTransform != null)
         {
             Vector3 cameraForward = cameraTransform.forward;
@@ -60,7 +69,6 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        // 移动方向基于Player当前朝向（即视角方向）
         Vector3 movement = transform.forward * moveY + transform.right * moveX;
         rb.AddForce(movement * moveSpeed);
     }
@@ -109,6 +117,44 @@ public class Player : MonoBehaviour
         if (gameOverText != null) gameOverText.gameObject.SetActive(false);
     }
 
+    void ShowWelcomeMessage()
+    {
+        if (welcomeText != null)
+        {
+            welcomeText.text = "I was injured by a shell explosion. Oh my god, my arms and legs cannot move normally, and my ears keep buzzing. What's on the wall? Oh, I remember now. I'm a musician, and here are my performance photos.";
+            welcomeText.gameObject.SetActive(true);
+        }
+
+        if (backgroundPanel != null)
+        {
+            backgroundPanel.gameObject.SetActive(true);
+        }
+
+        Invoke("HideWelcomeMessage", messageDuration);
+    }
+
+    void ShowWelcomeMessage2()
+    {
+        if (welcomeText != null)
+        {
+            welcomeText.text = "I can't sink down, I want to find my musical inspiration in this mountain, climb to the top of the mountain, and rediscover the feeling of playing. Even with my disabled body, I still want to continue my music career.";
+            welcomeText.gameObject.SetActive(true);
+        }
+
+        if (backgroundPanel != null)
+        {
+            backgroundPanel.gameObject.SetActive(true);
+        }
+
+        Invoke("HideWelcomeMessage", messageDuration);
+    }
+
+    void HideWelcomeMessage()
+    {
+        if (welcomeText != null) welcomeText.gameObject.SetActive(false);
+        if (backgroundPanel != null) backgroundPanel.gameObject.SetActive(false);
+    }
+
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Pickup"))
@@ -128,6 +174,14 @@ public class Player : MonoBehaviour
         else if (other.gameObject.CompareTag("Water"))
         {
             ResetPlayer();
+        }
+        else if (other.gameObject.CompareTag("1"))
+        {
+            ShowWelcomeMessage();
+        }
+        else if (other.gameObject.CompareTag("2"))
+        {
+            ShowWelcomeMessage2();
         }
     }
 
