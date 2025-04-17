@@ -8,6 +8,8 @@ TagManager:
   - Water
   - 1
   - 2
+  - Pickup
+  - Sphere
   layers:
   - Default
   - TransparentFX
