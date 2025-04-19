@@ -2,9 +2,19 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
+    // 动画控制部分
+    [SerializeField] private Animator m_animator = null;
+    [SerializeField] private Rigidbody m_rigidBody = null;
+    private float m_currentV = 0;
+    private float m_currentH = 0;
+    private readonly float m_interpolation = 10;
+    private bool m_isGrounded;
+    private List<Collider> m_collisions = new List<Collider>();
+
     // 移动和跳跃变量
     private Rigidbody rb;
     private float moveX, moveY;
@@ -45,6 +55,21 @@ public class Player : MonoBehaviour
     public Image backgroundBook;
     public float messageDuration = 5f;
 
+    [Header("Animation Settings")]
+    [SerializeField] private float walkAnimSpeed = 0.5f;
+    [SerializeField] private float runAnimSpeed = 1.5f;
+    private bool isRunning = false;
+
+    [Header("Victory Settings")]
+    public AudioSource victoryAudio; // 胜利音效
+    
+
+    private void Awake()
+    {
+        if (!m_animator) m_animator = GetComponent<Animator>();
+        if (!m_rigidBody) m_rigidBody = GetComponent<Rigidbody>();
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -81,23 +106,94 @@ public class Player : MonoBehaviour
         }
 
         // Shift加速检测
-        if (hasSpeedBoost && Keyboard.current.leftShiftKey.isPressed)
+        UpdateAnimationState();
+    }
+
+    private void UpdateAnimationState()
+    {
+        float moveMagnitude = new Vector2(moveX, moveY).magnitude;
+
+        // 只有在获得加速能力且按住Shift时才进入奔跑状态
+        if (hasSpeedBoost && Keyboard.current.leftShiftKey.isPressed && moveMagnitude > 0.1f)
         {
             currentMoveSpeed = baseMoveSpeed * speedBoostMultiplier;
+            isRunning = true;
+            m_animator.SetFloat("MoveSpeed", runAnimSpeed);
         }
         else
         {
             currentMoveSpeed = baseMoveSpeed;
+            isRunning = false;
+            m_animator.SetFloat("MoveSpeed", walkAnimSpeed * moveMagnitude);
         }
+
     }
 
     void FixedUpdate()
     {
         // 根据是否在地面设置不同阻尼
-        rb.drag = IsGrounded() ? dragGround : dragAir;
+        m_rigidBody.drag = IsGrounded() ? dragGround : dragAir;
 
         Vector3 movement = transform.forward * moveY + transform.right * moveX;
-        rb.AddForce(movement * currentMoveSpeed);
+        m_rigidBody.AddForce(movement * currentMoveSpeed);
+
+        // 更新动画接地状态
+        m_animator.SetBool("Grounded", m_isGrounded);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        ContactPoint[] contactPoints = collision.contacts;
+        for (int i = 0; i < contactPoints.Length; i++)
+        {
+            if (Vector3.Dot(contactPoints[i].normal, Vector3.up) > 0.5f)
+            {
+                if (!m_collisions.Contains(collision.collider))
+                {
+                    m_collisions.Add(collision.collider);
+                }
+                m_isGrounded = true;
+            }
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        ContactPoint[] contactPoints = collision.contacts;
+        bool validSurfaceNormal = false;
+        for (int i = 0; i < contactPoints.Length; i++)
+        {
+            if (Vector3.Dot(contactPoints[i].normal, Vector3.up) > 0.5f)
+            {
+                validSurfaceNormal = true; break;
+            }
+        }
+
+        if (validSurfaceNormal)
+        {
+            m_isGrounded = true;
+            if (!m_collisions.Contains(collision.collider))
+            {
+                m_collisions.Add(collision.collider);
+            }
+        }
+        else
+        {
+            if (m_collisions.Contains(collision.collider))
+            {
+                m_collisions.Remove(collision.collider);
+            }
+            if (m_collisions.Count == 0) { m_isGrounded = false; }
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (m_collisions.Contains(collision.collider))
+        {
+            m_collisions.Remove(collision.collider);
+        }
+        if (m_collisions.Count == 0) { m_isGrounded = false; }
     }
 
     bool IsGrounded()
@@ -119,6 +215,7 @@ public class Player : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         lastJumpTime = Time.time;
+        m_animator.SetTrigger("Jump"); // 触发跳跃动画
         if (jumpAudio != null) jumpAudio.Play();
     }
 
@@ -155,11 +252,25 @@ public class Player : MonoBehaviour
         if (count >= 20 && hasFoundBook)
         {
             ShowWinMessage();
+            PlayVictoryAnimation();
         }
         else
         {
             ShowHintMessage();
         }
+    }
+
+    private void PlayVictoryAnimation()
+    {
+        // 触发胜利动画
+        m_animator.SetTrigger("Win");
+
+        // 播放胜利特效和音效
+        victoryAudio.Play();
+
+        // 解锁鼠标
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     void ShowWinMessage()
@@ -298,6 +409,7 @@ public class Player : MonoBehaviour
             count = count + 1;
             SetCountText();
             clickAudio.Play();
+            m_animator.SetTrigger("Pickup"); // 触发拾取动画
         }
         else if (other.gameObject.CompareTag("Sphere"))
         {
@@ -305,6 +417,7 @@ public class Player : MonoBehaviour
             count = count + 2;
             SetCountText();
             clickAudio.Play();
+            m_animator.SetTrigger("Pickup"); // 触发拾取动画
         }
         else if (other.gameObject.CompareTag("Water"))
         {
@@ -325,13 +438,14 @@ public class Player : MonoBehaviour
             count = count + 15;
             SetCountText();
             clickAudio.Play();
-            
+
         }
         else if (other.gameObject.CompareTag("Book"))
         {
             ShowWelcomeMessage4();
             other.gameObject.SetActive(false);
             clickAudio.Play();
+            m_animator.SetTrigger("Pickup"); // 触发拾取动画
 
         }
         else if (other.gameObject.CompareTag("speed"))
@@ -340,6 +454,7 @@ public class Player : MonoBehaviour
             hasSpeedBoost = true;
             if (speedBoostAudio != null) speedBoostAudio.Play();
             Destroy(other.gameObject); // 拾取后移除
+            m_animator.SetTrigger("Pickup"); // 触发拾取动画
         }
         else if (other.gameObject.CompareTag("end"))
         {
