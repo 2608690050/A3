@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 
-public class PlayerController : MonoBehaviour
+public class dm : MonoBehaviour
 {
     private Rigidbody rb;
 
@@ -63,10 +63,3 @@ public class PlayerController : MonoBehaviour
 
 
 }
-
-
-
-
-
-
-
