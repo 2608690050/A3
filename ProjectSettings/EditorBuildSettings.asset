@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/SIYan Chen/Scenes/Factory.unity
+    guid: 5ce9efef3ef79064cb60336d0b6fb166
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/SIYan Chen/Scenes/end.unity
+    guid: 32843d2c7165b494bbf471de595527a3
   m_configObjects: {}
