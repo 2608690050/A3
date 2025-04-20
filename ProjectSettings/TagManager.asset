@@ -4,6 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Collect
+  - Part
+  - Note
   - ground
   - Water
   - 1
@@ -21,6 +24,8 @@ TagManager:
   - 
   - Water
   - UI
+  - Player
+  - Ground
   - ground
   - 
   - 
