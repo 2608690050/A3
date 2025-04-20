@@ -12,11 +12,16 @@ TagManager:
   - Story
   - Text_Count
   - "\u5230\u8FBE\u5C71\u9876"
+  - Dust
+  - Leaves
+  - Coulds
+  - Water
+  - groundLayer
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - groundLayer
   - Water
   - UI
   - 
