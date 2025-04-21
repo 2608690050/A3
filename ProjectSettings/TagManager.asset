@@ -17,6 +17,19 @@ TagManager:
   - Coulds
   - Water
   - groundLayer
+  - Collect
+  - Part
+  - Note
+  - ground
+  - Water
+  - 1
+  - 2
+  - Pickup
+  - Sphere
+  - Tre-score
+  - Book
+  - speed
+  - end
   layers:
   - Default
   - TransparentFX
@@ -24,7 +37,9 @@ TagManager:
   - groundLayer
   - Water
   - UI
-  - 
+  - Player
+  - Ground
+  - ground
   - 
   - 
   - 
