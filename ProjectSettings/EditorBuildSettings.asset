@@ -5,6 +5,24 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 1
+    path: Assets/RanYu/MyScenes/Setting.unity
+    guid: 4845fc8dd4793444b90bf86f539bbdb7
+  - enabled: 1
+    path: Assets/RanYu/MyScenes/Level3.unity
+    guid: e8d41f3e3e91558479ebfee259f0f524
+  - enabled: 1
+    path: Assets/RanYu/MyScenes/HomePage.unity
+    guid: 318d78e17f4a12d4194c5194dd8d2307
+  - enabled: 1
+    path: Assets/RanYu/MyScenes/Help.unity
+    guid: ff270f7a7b45c3a43948abe8db010ea4
+  - enabled: 1
+    path: Assets/RanYu/MyScenes/Credits.unity
+    guid: 86b6c281a33e7af47aca7f1d17a2ffee
+  - enabled: 1
+    path: Assets/RanYu/MyScenes/Level.unity
+    guid: 9e0477fbf80cf0a41866bcc95b6e4281
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000

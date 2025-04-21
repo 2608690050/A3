@@ -4,6 +4,19 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Item
+  - Door
+  - ScoreObject
+  - StoryTigger
+  - New tag
+  - Story
+  - Text_Count
+  - "\u5230\u8FBE\u5C71\u9876"
+  - Dust
+  - Leaves
+  - Coulds
+  - Water
+  - groundLayer
   - Collect
   - Part
   - Note
@@ -21,7 +34,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - groundLayer
   - Water
   - UI
   - Player
